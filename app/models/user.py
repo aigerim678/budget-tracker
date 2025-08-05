@@ -11,7 +11,7 @@ class User(Base):
     __table_args__ = {'schema': 'tracker'}
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    username: Mapped[str] = mapped_column(String)
-    email: Mapped[str] = mapped_column(String)
-    password_hash: Mapped[str] = mapped_column(String)
+    username: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    email: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    password_hash: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
