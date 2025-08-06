@@ -9,7 +9,6 @@ class ExpenseBase(BaseModel):
     description: str | None = None
     date: datetime
     category_id: int
-    user_id: int
 
 
 class ExpenseCreate(ExpenseBase):
@@ -18,3 +17,4 @@ class ExpenseCreate(ExpenseBase):
 
 class ExpenseOut(ExpenseBase):
     id: int
+    user_id: int
