@@ -15,5 +15,5 @@ class Expense(Base):
     currency: Mapped[str] = mapped_column(String(10), default='KZT')
     description: Mapped[str] = mapped_column(Text)
     date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
-    category_id: Mapped[int] = mapped_column(ForeignKey('categories.id'), nullable=False)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'), nullable=False)
+    category_id: Mapped[int] = mapped_column(ForeignKey('tracker.categories.id'), nullable=False)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('tracker.users.id'), nullable=False)
