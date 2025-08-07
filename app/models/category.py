@@ -2,11 +2,12 @@ from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy import String, Text, Integer, ForeignKey
 
 from app.database import Base
+from app.settings import database
 
 
 class Category(Base):
     __tablename__ = 'categories'
-    __table_args__ = {'schema': 'tracker'}
+    __table_args__ = {'schema': database.schema}
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False)

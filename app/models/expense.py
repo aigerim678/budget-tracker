@@ -4,11 +4,12 @@ from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy import String, DateTime, Text, Integer, ForeignKey, Numeric
 
 from app.database import Base
+from app.settings import database
 
 
 class Expense(Base):
     __tablename__ = 'expenses'
-    __table_args__ = {'schema': 'tracker'}
+    __table_args__ = {'schema': database.schema}
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
