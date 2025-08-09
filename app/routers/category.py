@@ -11,11 +11,12 @@ from app.dependencies import get_current_user
 router = APIRouter(
     prefix="/category",
     tags=["Category"],
+    dependencies=[Depends(get_current_user)],
     responses={404: {"description": "Not found"}}
 )
 
 
-@router.get("/all", response_model=List[CategoryOut], dependencies=[Depends(get_current_user)])
+@router.get("/all", response_model=List[CategoryOut])
 async def read_all_categories(db: Annotated[AsyncSession, Depends(get_db)]):
     return await get_all_categories(session=db)
 
@@ -26,12 +27,13 @@ async def read_my_categories(current_user: Annotated[UserOut, Depends(get_curren
     return await get_my_categories(user_id=current_user.id, session=db)
 
 
-@router.get("/{id}", response_model=CategoryOut, dependencies=[Depends(get_current_user)])
+@router.get("/{id}", response_model=CategoryOut)
 async def read_category(id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     return await get_category_by_id(category_id=id, session=db)
 
 
 @router.post("/create", response_model=CategoryOut)
-async def create_category(category: CategoryCreate, current_user: Annotated[UserOut, Depends(get_current_user)],
+async def create_category(category: CategoryCreate,
+                          current_user: Annotated[UserOut, Depends(get_current_user)],
                           db: Annotated[AsyncSession, Depends(get_db)]):
     return await add_category(category=category, user_id=current_user.id, session=db)
