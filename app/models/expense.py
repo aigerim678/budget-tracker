@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import date
 
 from sqlalchemy.orm import mapped_column, Mapped
-from sqlalchemy import String, DateTime, Text, Integer, ForeignKey, Numeric
+from sqlalchemy import String, DateTime, Text, Integer, ForeignKey, Numeric, func
 
 from app.database import Base
 from app.settings import database
@@ -15,6 +15,6 @@ class Expense(Base):
     amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     currency: Mapped[str] = mapped_column(String(10), default='KZT')
     description: Mapped[str] = mapped_column(Text)
-    date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    date: Mapped[date] = mapped_column(DateTime, nullable=False, server_default=func.current_date())
     category_id: Mapped[int] = mapped_column(ForeignKey('tracker.categories.id'), nullable=False)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('tracker.users.id'), nullable=False)

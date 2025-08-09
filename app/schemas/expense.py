@@ -1,20 +1,27 @@
-from datetime import datetime
+from datetime import date
+from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class CurrencyEnum(str, Enum):
+    USD = "USD"
+    KZT = "KZT"
+    RUB = "RUB"
 
 
 class ExpenseBase(BaseModel):
     amount: float
-    currency: str
+    currency: CurrencyEnum = CurrencyEnum.KZT
     description: str | None = None
-    date: datetime
-    category_id: int
+    date: date
 
 
 class ExpenseCreate(ExpenseBase):
-    pass
+    category: str
 
 
 class ExpenseOut(ExpenseBase):
     id: int
     user_id: int
+    category_id: int

@@ -1,6 +1,6 @@
 from typing import List, Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -15,8 +15,11 @@ router = APIRouter(
 )
 
 
-@router.get("/all", response_model=List[UserOut], dependencies=[Depends(get_current_user)])
-async def read_all_users(db: Annotated[AsyncSession, Depends(get_db)]) -> List[UserOut]:
+@router.get("/", response_model=List[UserOut], description="For admins")
+async def read_all_users(current_user: Annotated[UserOut, Depends(get_current_user)],
+                         db: Annotated[AsyncSession, Depends(get_db)]) -> List[UserOut]:
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
     return await get_all_users(session=db)
 
 
@@ -24,6 +27,7 @@ async def read_all_users(db: Annotated[AsyncSession, Depends(get_db)]) -> List[U
 async def read_me(current_user: Annotated[UserOut, Depends(get_current_user)], ):
     return current_user
 
-@router.post("/create", response_model=UserOut, description="Create a new user to login")
+
+@router.post("/", response_model=UserOut, description="Create a new user to login")
 async def create_user(user: UserCreate, db: Annotated[AsyncSession, Depends(get_db)]):
     return await add_user(user=user, session=db)
