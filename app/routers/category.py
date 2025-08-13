@@ -32,7 +32,10 @@ async def read_my_categories(current_user: Annotated[UserOut, Depends(get_curren
 
 @router.get("/{id}", response_model=CategoryOut)
 async def read_category(id: int, db: Annotated[AsyncSession, Depends(get_db)]):
-    return await get_category_by_id(category_id=id, session=db)
+    category = await get_category_by_id(category_id=id, session=db)
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
 
 
 @router.post("/", response_model=CategoryOut)

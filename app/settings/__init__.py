@@ -1,1 +1,1 @@
-from .settings import config, database, auth
+from .settings import config, database, auth, cache
