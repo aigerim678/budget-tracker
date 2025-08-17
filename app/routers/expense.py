@@ -2,7 +2,7 @@ import asyncio
 import json
 from typing import List, Annotated
 
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -43,7 +43,7 @@ async def read_expense(id: int, db: Annotated[AsyncSession, Depends(get_db)]):
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
 
-    redis_client.set(f"expense_{id}", json.dumps(jsonable_encoder(expense)))
+    redis_client.set(f"expense_{id}", json.dumps(jsonable_encoder(expense), ex=100))
     return expense
 
 
